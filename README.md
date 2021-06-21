@@ -12,6 +12,6 @@ On line 53 replace the Xs with your Finnhub API key, one of which can easily be 
 
 On line 57 you'll define the path which is referenced on line 1035 to your working directory where you have a Trader_Returns.csv to monitor returns.
 
-Lastly, on lines 54 and 55 these act as your API keys for Twilio services which will send you text messages throughout the trading process. You will have to set this up on your own but Twilio does a great job showing you how to do so! It does cost money but it's less than a penny per SMS (USD).
+Lastly, on lines 54 and 55 these act as your API keys for Twilio services which will send you text messages throughout the trading process. You will have to set this up on your own but Twilio does a great job showing you how to do so! It does cost money but it's less than a penny per SMS (USD). Once you have these keys enter them as environmental variables for added security.
 
 Once, you have all of this set, you should be good to go for this methodology!
