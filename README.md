@@ -1,6 +1,2 @@
 # WatchList-Projects
--👋 Hi, I’m @lachocki
--👀 I’m interested in designing trading bots!
--🌱 I’m currently learning Python
--💞️ I’m looking to collaborate on just about anything!
--📫 How to reach me www.linkedin.com/in/mlachocki
+What you'll find here is my work since roughly October of 2020 on developing and designing trading bots. Any personal information will be left out of the code and replaced with a copious amount of X's :)
