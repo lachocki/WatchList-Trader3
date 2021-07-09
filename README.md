@@ -1,8 +1,14 @@
 [percMovements.csv](https://github.com/lachocki/WatchList-Projects/files/6689783/percMovements.csv)
 # WatchList-Projects
-What you'll find here is my work since roughly October of 2020 on developing and designing trading bots. Any personal information will be left out of the code and replaced with a copious amount of Xs :) I would recommend saving this file to somewhere out of reach of GitHub so any changes you make to it CAN'T be seen by others!  Below I'll walk you through how and where to replace information so you can get it running for yourself! 
+First off this is my first use of Github so if you have advice, I'm always happy to learn. What you'll find here is my work since roughly October of 2020 on developing and designing trading bots. Any personal information will be left out of the code and replaced with a copious amount of Xs :) I would recommend saving this file to somewhere out of reach of GitHub so any changes you make to it CAN'T be seen by others! I think that's how that works. Below I'll walk you through how and where to replace information so you can get it running for yourself! But first.
 
-But first a few things up front. The myIndication() function was my attempt at calculating RSI on my own but I was unable and not incentivized to find frequent enough data to have it work correctly. Additionally, 'import talib' gives issues to many who have issues being able to 'pip install ta-lib', it took me a while. So you can comment out all thigs associated with that function since it isn't done (myIndication(), T.csv, S.csv, import talib). Next up I use a few different .csv files to store data: Trader_Returns.csv (Where I monitor my returns for column headers reference line 1078, percMovements.csv (which stores the relative speed of an interval of trading AND is attached to this so you dont have to run all of your own data), StockOrders.csv (is the result of pulling my orders from the Robinhood API, reference line 1035.
+Install & Dependencies:
+Below are the 3 packages that are somewhat unusual  that the algorithm needs to be able to place trades, get data, and send SMS notifications. Otherwise most packages you'll see are pretty ordinary (os,time,pandas,etc.)
+pip install robin-stocks
+pip install finnhub-python
+pip install twilio
+
+Next up I use a few different .csv files to store data: Trader_Returns.csv (Where I monitor my returns for column headers reference line 1078, percMovements.csv (which stores the relative speed of an interval of trading AND is attached to this so you dont have to run all of your own data), StockOrders.csv (is the result of pulling my orders from the Robinhood API, reference line 1035.
 
 Next up, changing information to your own! On line 28 you'll want to change the text with in the quotes to your one time password (OTP) which Robinhood will give you once you set up Two-Factor Authentication (2FA) which the documentation for the Robinhood API can walk you through at https://robin-stocks.readthedocs.io/en/latest/quickstart.html
 
