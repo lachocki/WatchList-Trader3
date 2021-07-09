@@ -4,8 +4,11 @@ First off this is my first use of Github so if you have advice, I'm always happy
 
 Install & Dependencies:
 Below are the 3 packages that are somewhat unusual  that the algorithm needs to be able to place trades, get data, and send SMS notifications. Otherwise most packages you'll see are pretty ordinary (os,time,pandas,etc.)
+
 pip install robin-stocks
+
 pip install finnhub-python
+
 pip install twilio
 
 Next up I use a few different .csv files to store data: Trader_Returns.csv (Where I monitor my returns for column headers reference line 1078, percMovements.csv (which stores the relative speed of an interval of trading AND is attached to this so you dont have to run all of your own data), StockOrders.csv (is the result of pulling my orders from the Robinhood API, reference line 1035.
