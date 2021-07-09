@@ -18,7 +18,7 @@ import time
 import pandas as pd
 import numpy as np
 import pyotp
-import talib
+#import talib
 import traceback
 
 username = os.getenv("Username")
@@ -153,73 +153,6 @@ def indication(ticker,shorthand,HowManyT,HowManyS):
     print(datetime.fromtimestamp(cut["Unix_TS"]),"|",shorthand,": Indication->",rsi,"(",LowerLimit,"-",UpperLimit,")",howmany)
     return rsi
 
-def myIndication():
-    n=14
-    
-    YMD= datetime.now().strftime('%Y-%m-%d')
-    
-    Tdf= pd.read_csv("T.csv",parse_dates=['Date']).tail(n)
-    tPrice= getPrice(T)
-    new_row={'Date':YMD,'Close':tPrice}
-    Tdf=Tdf.append(new_row, ignore_index=True)
-    yesterdayPrice= Tdf.iloc[13,1]
-    Chng= tPrice-yesterdayPrice
-    
-    if Chng <= 0:
-        new_row={'Date':YMD, 'Close':tPrice,'Chng':Chng,'U':0,'D':abs(Chng)}
-        Tdf=Tdf.append(new_row, ignore_index=True)
-    else:
-        new_row={'Date':YMD, 'Close':tPrice,'Chng':Chng,'U':Chng,'D':0}
-        Tdf=Tdf.append(new_row, ignore_index=True)
-    
-    avgU= Tdf['U'].tail(n).mean()
-    avgD= Tdf['D'].tail(n).mean()  
-    RS1= float(avgU/avgD)
-    CurrentRSIT= int(100-100/(1+RS1))
-    CurrentRSIT= talib.RSI(Tdf['Close'], timeperiod=14).tail(1)
-
-    
-    emaU= Tdf['U'].ewm(span=n,min_periods=0,adjust=False,ignore_na=False).mean()
-    emaU= float(emaU.tail(1))
-    emaD= Tdf['D'].ewm(span=n,min_periods=0,adjust=False,ignore_na=False).mean()
-    emaD= float(emaD.tail(1))
-    RS2= float(emaU/emaD)
-    CurrentRSIT2= int(100-100/(1+RS2))
-    
-    Tdf=Tdf[Tdf.Date != YMD]
-    print(CurrentRSIT)
-    
-    Sdf= pd.read_csv("S.csv",parse_dates=['Date']).tail(n)
-    sPrice= getPrice(S)
-    new_row={'Date':YMD,'Close':sPrice}
-    Sdf=Sdf.append(new_row, ignore_index=True)
-    yesterdayPrice= Sdf.iloc[13,1]
-    Chng= sPrice-yesterdayPrice
-    
-    if Chng <= 0:
-        new_row={'Date':YMD, 'Close':sPrice,'Chng':Chng,'U':0,'D':abs(Chng)}
-        Sdf=Sdf.append(new_row, ignore_index=True)
-    else:
-        new_row={'Date':YMD, 'Close':sPrice,'Chng':Chng,'U':Chng,'D':0}
-        Sdf=Sdf.append(new_row, ignore_index=True)
-    
-    avgU= Sdf['U'].tail(n).mean()
-    avgD= Sdf['D'].tail(n).mean()  
-    RS1= float(avgU/avgD)
-    CurrentRSIS= int(100-100/(1+RS1))
-    CurrentRSIS=talib.RSI(Sdf['Close'],timeperiod=14).tail(1)
-    
-    emaU= Sdf['U'].ewm(span=n,min_periods=0,adjust=False,ignore_na=False).mean()
-    emaU= float(emaU.tail(1))
-    emaD= Sdf['D'].ewm(span=n,min_periods=0,adjust=False,ignore_na=False).mean()
-    emaD= float(emaD.tail(1))
-    RS2= float(emaU/emaD)
-    CurrentRSIS2= int(100-100/(1+RS2))
-    
-    Sdf=Sdf[Sdf.Date != YMD]
-    print(CurrentRSIS)
-    return CurrentRSIT,CurrentRSIT2,CurrentRSIS,CurrentRSIS2
-
 def stoploss(ticker,shorthand,BuyPrice,stopPerc,HowMany):
     import numpy as np
     TradingPrice=getPrice(ticker)
@@ -343,90 +276,7 @@ def notifyMe(message,shorthand):
                       from_='+12564748541',
                       to=mpn
                   )
-    print(message.sid)
-    
-def getClose(T,S):
-    import yfinance as yf
-    TQ=yf.Ticker(T)
-    Tdf= TQ.history(period="1mo")
-    
-    Tdf=Tdf.drop('Open', axis=1)
-    Tdf=Tdf.drop('High', axis=1)
-    Tdf=Tdf.drop('Low', axis=1)
-    Tdf=Tdf.drop('Volume', axis=1)
-    Tdf=Tdf.drop('Dividends', axis=1)
-    Tdf=Tdf.drop('Stock Splits', axis=1)
-    Tdf['Chng']=0
-    
-    old=0
-    new=old+1
-    newList=list(Tdf['Chng'])
-    newerList=list(Tdf['Close'])
-    length=len(newList)-1
-    
-    for i in range(length):
-        newList[new]=newerList[new]-newerList[old]
-        old+=1
-        new=old+1
-    Tdf['Chng']=newList
-    Tdf['U']=1
-    Tdf['D']=1
-    U=[]
-    D=[]
-            
-    for i, j, k in zip(Tdf['Chng'], Tdf['U'], Tdf['D']):
-        if i > 0:
-            U.append(i)
-            D.append(0)
-        else:
-            U.append(0)
-            D.append(abs(i))
-            
-    Tdf['U']=U
-    Tdf['D']=D
-    
-    Tdf.to_csv("T.csv")
-         
-
-    SQ=yf.Ticker(S)
-    Sdf= SQ.history(period="1mo")
-    
-    Sdf=Sdf.drop('Open', axis=1)
-    Sdf=Sdf.drop('High', axis=1)
-    Sdf=Sdf.drop('Low', axis=1)
-    Sdf=Sdf.drop('Volume', axis=1)
-    Sdf=Sdf.drop('Dividends', axis=1)
-    Sdf=Sdf.drop('Stock Splits', axis=1)
-    Sdf['Chng']=0
-    
-    old=0
-    new=old+1
-    newList=list(Sdf['Chng'])
-    newerList=list(Sdf['Close'])
-    length=len(newList)-1
-    
-    for i in range(length):
-        newList[new]=newerList[new]-newerList[old]
-        old+=1
-        new=old+1
-    Sdf['Chng']=newList
-    Sdf['U']=1
-    Sdf['D']=1
-    U=[]
-    D=[]
-            
-    for i, j, k in zip(Sdf['Chng'], Sdf['U'], Sdf['D']):
-        if i > 0:
-            U.append(i)
-            D.append(0)
-        else:
-            U.append(0)
-            D.append(abs(i))
-            
-    Sdf['U']=U
-    Sdf['D']=D
-    
-    Sdf.to_csv("S.csv")  
+    print(message.sid) 
 
 def sellProcess(ticker,shorthand,HowMany):
 
@@ -575,7 +425,6 @@ HowManyS=howMany(S,overall_percent)
 
 while True:
     now = datetime.now().strftime('%H%M')
-    # YMD= datetime.now().strftime('%Y-%m-%d')
     weekno = datetime.today().weekday()
     time.sleep(short)
 
@@ -1116,12 +965,3 @@ while True:
             print(message.sid)
             traceback.print_exc()
             continue
-        
-        if now == '1401' and T == 'TQQQ':
-            getClose(T,S)
-            print("New line added to database if appropriate, sleeping")
-            time.sleep(60)
-        
-
-
-   
