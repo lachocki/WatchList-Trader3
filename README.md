@@ -1,5 +1,4 @@
-[percMovements.csv](https://github.com/lachocki/WatchList-Projects/files/6689783/percMovements.csv)
-# WatchList-Projects
+# WatchList-Trader3
 First off this is my first use of Github so if you have advice, I'm always happy to learn. What you'll find here is my work since roughly October of 2020 on developing, designing, and refining this trading bot. It is designed to trade in any market conditions by utilizing 3x leveraged ETNs that have both a 'Bull' and 'Bear' version so you can bet for or against the market at any given point in time.
 
 Any personal information will be left out of the code and replaced with a copious amount of Xs :) I would recommend saving this file to somewhere out of reach of GitHub so any changes you make to it CAN'T be seen by others! I think that's how that works. Below I'll walk you through how and where to replace information so you can get it running for yourself! But first.
